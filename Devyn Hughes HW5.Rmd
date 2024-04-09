@@ -1,0 +1,137 @@
+---
+title: "Devyn Hughes HW 5"
+output: html_document
+date: "2024-02-23"
+---
+# Introduction
+
+The Federalist Papers were a series of documents looking to initiate the ratification of the Constitution. These documents were written by a select number of authors. These authors consisted of Alexander Hamilton, James Madison and John Jay. Each of the documents were used to explain different parts of the Constitution. Within this particular dataset, there are a total of 11 disputed documents that could have been written by James Madison or Alexander Hamilton. Previously, we tried using clustering techniques. Now, we will try to analyze the documents using a decision tree to figure out who wrote these disputed essays.
+
+Decision trees are a form of machine learning that can be used for classification and regression. For this experiment, we will be using it for classification between the different authors. Currently, we have Hamilton, Madison, and Jay within the data. By analyzing all the attributes within the data set, we will be seeing if we can match out previous prediction from the last report as well.
+
+# Load Libraries and Data
+```{r message=FALSE}
+# Libraries
+library(dplyr)
+library(factoextra)
+library(cluster)
+library(ggplot2)
+library(dendextend)
+library(mclust)
+library(caret)
+library(rpart)
+library(rpart.plot)
+
+#Load the Data
+Fedpapers = read.csv("C:/Users/Devs PC/OneDrive/Documents/IST 707/fedPapers85_fromClass.csv")
+```
+
+# Prepare the Data
+```{r}
+Fedpapers$filename = NULL
+newpapers = Fedpapers[Fedpapers$author!= "dispt",]
+disptpapers = Fedpapers[Fedpapers$author == "dispt",]
+```
+
+# Split the Data
+
+In order to apply a decision tree to this dataset, we had to separate our target attributes, the dispute papers and the known data. Once this was completed, we then need to train a model. In order to train a model, we had to split the data of the known authors for a better prediction.
+
+```{r}
+set.seed(50)
+train_index <- sample(1:nrow(newpapers), nrow(newpapers)*0.7)
+train_set <- newpapers[train_index, ]
+test_set <- newpapers[-train_index, ]
+```
+
+With our known author data successfully split into two separate groups with a 70%/30% split, we can begin creating model for analysis.
+
+# Model 1
+```{r}
+model1 = rpart(author~.,data = train_set, method = "class")
+rpart.plot(model1)
+
+#Predictions for Model 1
+predictions <- predict(model1, test_set, type = "class")
+predictions = as.factor(predictions)
+```
+The first model created was a basic Decision Tree without setting any parameters. 
+
+# Model 2
+```{r}
+model2 = rpart(author~.,data = train_set, method = "class", control = rpart.control(minsplit = 10, minbucket=5, maxdepth = 10))
+rsq.rpart(model2)
+summary(model2)
+rpart.plot(model2)
+
+#Predictions for Model 2
+predictions2 <- predict(model2, test_set, type = "class")
+predictions2
+```
+For the second model, we changed a couple of parameters to see if we can get a better understanding. Here are the changes below:
+- Minsplit = 10 - Specifies the minimum number of observations that must exist in a node
+- Minbucket = 5 - Defines the minimum number of observations that must be present in any lead node of the tree
+- Maxdepth = 10 - Limits the maximum depth of any node in the final tree where depth is the length of the longest path from a root to a lead
+
+# Model 3
+```{R}
+model3 = rpart(author~.,data = train_set, method = "class", control = rpart.control(minsplit = 3, minbucket = 5, maxdepth = 7))
+rsq.rpart(model3)
+summary(model3)
+rpart.plot(model3)
+
+#Predictions for Model 3
+predictions3 <- predict(model3, test_set, type = "class")
+predictions3
+```
+For the third model, we changed the parameters to different values as well.
+
+# Evaluating the Different Models
+```{R}
+# Evaluate the model with the same Confusion Matrix as we used before
+library(caret)
+actual = test_set$author
+confMatrix = table(Predicted = predictions, actual = actual)
+print(confMatrix)
+
+confMatrix2 = table(Predicted = predictions2,actual = actual)
+print(confMatrix2)
+
+confMatrix3 = table(Predicted = predictions3,actual = actual)
+print(confMatrix3)
+```
+
+For this section, we decided to evaluate each of our predictions on the test set to determine the validity of each of them. As we can see, models 2 and 3 were similar to one another while model one had a slight change in its outcome. With this being said, we can evaluate the accuracy of the models through a bit of calculation.
+
+# Calculate the Accuracy of the Models
+```{r}
+correct_pred = sum(predictions == actual)
+total_pred = length(predictions)
+accuracy = correct_pred/total_pred
+print(paste("The accuracy of model 1 is",accuracy))
+
+correct_pred2 = sum(predictions2 == actual)
+total_pred2 = length(predictions2)
+accuracy = correct_pred2/total_pred2
+print(paste("The accuracy of model 2 is",accuracy))
+
+correct_pred3 = sum(predictions3 == actual)
+total_pred3 = length(predictions3)
+accuracy = correct_pred3/total_pred3
+print(paste("The accuracy of model 1 is",accuracy))
+```
+
+In this section, we decided to determine the accuracy of each of the predictions to their actual results. Model 1 came out to be the lowest with 82.6% while model 2 and 3 obtained roughly 87%. With the two equaling the same amount, let's test this trained models to the disputed set we made earlier.
+
+# Testing the Model 2 to Disputed Papers
+```{r}
+pred2 = predict(model2,disptpapers,type = "class")
+pred2
+
+pred3 = predict(model3,disptpapers,type = "class")
+pred3
+```
+
+# Conclusion
+
+Previously, from the different clustering techniques, we were able to deduce that most of the disputed documents were created by Madison. The K Means and the Hierarchical Evaluation came out with similar results to one another. Using this new tool, we can confidently reinforce our evaluation from our previous assessment. With the three models that were created from the data, they all had an accuracy above 80%. This means that the percentage of the accuracy can be used as a marker to determine the validity of the model on unknown variables. However, we must note that a model's accuracy doesn't necessarily mean it will work on new data. The more data we can use to train a model can change or sway the model. Also, we have to be careful of overfitting and other issues as well. For this particular experiment, models 2 and 3 were the most compatible at determining the disputed test set we created. Ultimately, we three different techniques utilized, we can state that Madison created most of the documents that are in dispute.
