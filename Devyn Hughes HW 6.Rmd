@@ -1,0 +1,233 @@
+---
+title: "Devyn Hughes HW 6/7"
+output: html_document
+date: "2024-03-02"
+---
+# Introduction
+
+Machine Learning is a powerful tool that helps in various ways to promote better decisions in a more efficient and streamlined manner. But, how far can one go with the use of machine learning? There are a various number of tools and models that have been created to all try and find the "best fit" for any particular scenario. Some differ in approach than others while some of them change regarding the simple outputs and inputs into them. For this particular report we will be looking into a popular data set that is known as the Kaggle Digit Recognizer. This set presents 9 digits as the labels for thousands of hand written images. Each of the rows represent a handwritten letter while the columns define the pixels of number. With this data, we will briefly define each of the different methods on how we are going to model an algorithm to see which one best suits depicting this data set. We will be using a Decision Tree, PCA Classification, Naive Bayes, kNN, SVM, and Random Tree.
+
+A Decision Tree model is a non-parametric method of supervised learning. This particular model can handle classifications and regressions. Also, this model is the basis of a more complicated model known as a Random Tree Model.
+
+A Principal Component Analysis Classification is a pre-processing step used in conjunction with other algorithms. It is a way to reduce the dimensionality of a data set to provide easier and/or faster processing. Att he same time, we can potentially reduce noise and extract inappropriate features as well. For this project, we will be implementing this tactic with a Decision Tree model to see if there is a higher performance.
+
+A Naive Bayes model is a type of machine learning that is based on the populare theorem known as Bayes Theorem. It is a probabilistic form of learning that is used for classification tasks. It takes into consideration that all the feautres are independent of each other given the label you are classifying. 
+
+A k-Nearest Neighbors model is a type of model that operates on instance or memory based learning algorithms. It evaluates the distance and finds the "nearest neighbors"  to set an averaging for classification.
+
+A Support Vector machine Model is a form of machine learning that searches for the best hyperplane that separates different classes of the feature space.This can be altered by determining the dimension space, margin, and etc.
+
+A Random Forest Tree is a type of classification and regression model that operates by forming a multitude of decision trees and outputting the class that is the average or mode of the prediction. 
+
+With all of these different forms of machine learning, we can use each of these powerful tools to try and receive the best results possible for this experiment. Ultimately, we are looking to make models that are constructed effectively, have convincing outputs, a sufficient amount of information and details to repeat, determine if anything is irrelevant content, and who has the best accuracy!
+
+# Download Libraries
+```{r warning = FALSE, echo= FALSE}
+library(caret)
+library(dplyr)
+library(rpart.plot)
+library(e1071)
+library(naivebayes)
+library(FactoMineR)
+library(class)
+library(randomForest)
+```
+
+# Loading the Data
+```{r}
+traindata = read.csv("C:/Users/Devs PC/OneDrive/Documents/IST 707/train.csv",header = TRUE,stringsAsFactors = TRUE)
+testdata = read.csv("C:/Users/Devs PC/OneDrive/Documents/IST 707/test.csv",header = TRUE,stringsAsFactors = TRUE)
+```
+
+
+# Change the Data and Create a Sample
+```{r}
+#Set Seed for Processs
+set.seed(534)
+
+#Create New Data Index - Regulare 
+index = createDataPartition(traindata$label, p = .1, list = FALSE, times = 1)
+
+#View Dimension of New_data
+new_data = traindata[index,]
+dim(new_data)
+
+#Create Train/Test of New_Data
+index1 = createDataPartition(new_data$label, p = 0.8, list = FALSE, times = 1)
+train_new = new_data[index1,]
+test_new = new_data[-index1,]
+
+#Dimensions of the Train/Test Set
+dim(train_new)
+dim(test_new)
+
+```
+
+# Create the Model for Experiment
+```{r}
+#Model 1
+model1 = rpart(label~., data = train_new,method = "class", control = rpart.control(cp = 0, minsplit = 100, maxdepth = 20))
+rpart.plot(model1,box.palette = 0)
+rsq.rpart(model1)
+
+pred1 = predict(model1,test_new,type = "class")
+pred1 = as.factor(pred1)
+
+#Create a Confusion Matrix
+actual = test_new$label
+confMatrix1 = table(Predicted = pred1,actual = actual)
+print(confMatrix1)
+
+#Calculate Accuracy
+correct_pred = sum(pred1 == actual)
+total_pred = length(pred1)
+accuracy = correct_pred/total_pred
+print(paste("The accuracy of model 1 is",accuracy))
+```
+
+# Attempt PCA and Reducing Dimensionality
+
+```{R}
+pca_digits = PCA(t(select(new_data,-label)))
+new_data2 = data.frame(new_data$label,pca_digits$var$coord)
+
+#Create Train/Test of New_Data
+index2 = createDataPartition(new_data2$new_data.label, p = 0.8, list = FALSE, times = 1)
+train_new2 = new_data[index2,]
+test_new2 = new_data[-index2,]
+```
+
+# Model with PCA
+
+```{r}
+#Model 2
+model2 = rpart(label~., data = train_new2,method = "class", control = rpart.control(cp = 0, minsplit = 100, maxdepth = 20))
+rpart.plot(model2,box.palette = 0)
+rsq.rpart(model2)
+
+#Prediction
+pred2 = predict(model2,test_new2,type = "class")
+pred2 = as.factor(pred2)
+
+#Create a Confusion Matrix
+actual2 = test_new2$label
+confMatrix2 = table(Predicted = pred2,actual = actual2)
+print(confMatrix2)
+
+#Calculate Accuracy
+correct_pred2 = sum(pred2 == actual2)
+total_pred2 = length(pred2)
+accuracy2 = correct_pred2/total_pred2
+print(paste("The accuracy of model 2 is",accuracy2))
+```
+
+# Naives Bayes Model
+
+```{r}
+
+#Train A Simple Naive Bayes Model 
+n_model = naiveBayes(label~., data = train_new,na.action = na.pass, mode = "classification")
+summary(n_model)
+
+##Naive Bayes model Prediction 
+nb_Pred <- predict(n_model, test_new)
+
+#Create a Confusion Matrix
+actual3 = test_new$label
+confMatrix3 = table(Predicted = nb_Pred,actual = actual3)
+print(confMatrix3)
+
+#Calculate Accuracy
+correct_pred3 = sum(nb_Pred == actual)
+total_pred3 = length(nb_Pred)
+accuracy3 = correct_pred3/total_pred3
+print(paste("The accuracy of n_model is",accuracy3))
+```
+
+
+# kNN Model
+```{r}
+#Scale the Data
+train_knn = train_new[-1]
+test_knn = test_new[-1]
+
+test_pred <- knn(
+                 train = train_knn, 
+                 test = test_knn,
+                 cl = train_new$label, 
+                 k=10
+                 )
+
+#Cross Validation
+actual4 <- test_new$label
+
+cm <- table(actual4,test_pred)
+cm
+
+#Accuracy
+accuracy4 <- sum(diag(cm))/length(actual4)
+sprintf("Accuracy: %.2f%%", accuracy4*100)
+```
+
+# SVM Model
+```{r warning = FALSE}
+
+# Separate labels and features for the training set
+train_labels <- train_new[, 1]
+train_features <- train_new[, -1]  
+
+# Similarly, for the test set
+test_labels <- test_new[, 1]
+test_features <- test_new[, -1]
+
+# Train the SVM model
+svm_model <- svm(train_features, as.factor(train_labels), kernel = "linear")
+
+# Predict using the model
+svm_predict <- predict(svm_model, test_features)
+
+#Cross Validation
+actual5 <- test_new$label
+
+cm2 <- table(actual5,svm_predict)
+cm2
+
+#Accuracy
+accuracy5 <- sum(diag(cm2))/length(actual5)
+sprintf("Accuracy: %.2f%%", accuracy5*100)
+```
+
+# Random Forest
+```{r}
+#Train the Random Forest Model
+rf <- randomForest(label~., data=train_new, proximity=TRUE)
+
+# Predict using the model
+rf_predict <- predict(rf, test_new)
+
+#Cross Validation
+actual6 <- test_new$label
+
+cm3 <- table(actual6,svm_predict)
+cm3
+
+#Accuracy
+accuracy6 <- sum(diag(cm3))/length(actual6)
+sprintf("Accuracy: %.2f%%", accuracy6*100)
+```
+
+# Conclusion
+
+After creating 6 different models, we can surely say that the world of machine learning is always advancing! Improvements and changes are always being sought after to find that perfect model that provides the best results. However, not all models are equal as well! One model might work miraculously upon a data set and then one that is of similar information could prove different results. This means that data is always ever-shifting! This aspect is a data analyst's biggest challenge. As the saying goes, there are multiple ways to skin a cat. Relating this information to the report, all 6 of the different models either had similar results or some different results. In order to begin processing the data, we had to reduce the information down to a more manageable set. The original set has more than 100,000 cells! Thus, for this experiment, we reduced the dimensions down to a total of 4206x785. After reducing the data, we then created the train and test data from a 80/20 split. First, let's talk about the first model, the Decision Tree.
+
+For our first model, the Decision Tree, we had to take the data and process it in an rpart code. Initially, the results calculated with about 50% accuracy without changing any of the parameters. Altering the minsplit to 100 and the maxdepth to 20, we were able to calculate an accuracy of 67.22%. This is a decent accuracy for our testing. Potentially, the model could perform better if more parameters were tested. The beauty about Decision Trees is that they are simple to set up and require little preparation for a result. However, one disadvantage to this is that they can over complicate the tree which leads to over fitting.
+
+For the second model, the PCA and Reducing Dimensionality, we have to alter the data in a specific way to add this feature into a Decision Tree. In order for this process to work, we standardized all the data for each feature to be a mean of 0 and a variance equal to 1. Once standardized, we could use the visualizations to make sure that our information is within our limits. Adding this into an rpart model, we concluded an accuracy of 64.12%. This was lesser than the decision tree model. From doing this, we might have run into an issue with the PCA coding not recognizing the linearity of the data. Because of this, it caused a lesser percentage than improving it.
+
+For the third model, the Naive's Bayes Model, we started by placing the training data into it. There was no need for any further alterations of the data for this classification. Reassuring the model to pass any data that was NA, we received a result of 55.78%. Looking at the correlation matrix, we were able to see that integers that were similar in shape such as 4 and 9 were misinterpreted 33 times. For this model in particular, I believe that the issue where this model receives such a low accuracy is because it assumes all the features are independent from one another.
+
+For the fourth model, We used a k-Nearest Neighbor for this method. Before we set up a model for it, we had to determine a k value from 1 to 10. Usuing a 10 for starters, we were then able to process the model. Also, this model cannot have the labels within the data for processing. After creation, we were able to achieve and accuracy of 91.54%! This method even was able to discern a 4 from a 9 however, it did have some issues with 1 and 7. 
+
+For the fifth model, we used a Support Vector Machine. This particular model needed to have the labels listed as factors for processing. Originally, the kernel was set to "sigmoid" for that particular activation. However, since we are dealing with more linear workings of data, it was set to linear. Upon checking the accuracy of the data, it proved to be a 90.70% accuracy. This particular model didn't have any incorrect answers over a frequency of 5 however, they were more errors across the board.
+
+For our final model, we used a Random Forest tree model. This is a more complex use of a decision tree that was utilized earlier. For this model, it can handle robust data because it utilizes its effectiveness by reducing the variance through averaging multiple trees. For this particular ex
