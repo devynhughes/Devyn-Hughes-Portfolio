@@ -24,9 +24,8 @@ This repository contains a collection of data science projects and analyses that
    - Tools Used: Python.
    - [Link to Project](https://github.com/devynhughes/Devyn-Hughes-Portfolio/tree/a522f97b15ff267679e7cae5024b7e8be58724c4/US%20Municipal%20Census%20Data%20Folder)
    - *Project Demo*
-   - Watch the demo of this project below:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+   - Here is the Project Video below:
+   - [![YouTube](http://i.ytimg.com/vi/VLiRzTkDBJA/hqdefault.jpg)](https://www.youtube.com/watch?v=VLiRzTkDBJA)
 
 4. **Creating a Model to Predict Swirling Data**
    - Description: Through using code to generate random data sets that are set up in a form of a swirl, this projects tests various models to attempt to obtain a feasible accuracy.
