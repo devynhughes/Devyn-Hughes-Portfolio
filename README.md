@@ -26,7 +26,7 @@ This repository contains a collection of data science projects and analyses that
    - *Project Demo*
    - Watch the demo of this project below:
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=VLiRzTkDBJA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 4. **Creating a Model to Predict Swirling Data**
    - Description: Through using code to generate random data sets that are set up in a form of a swirl, this projects tests various models to attempt to obtain a feasible accuracy.
