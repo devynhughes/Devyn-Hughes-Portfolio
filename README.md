@@ -20,6 +20,17 @@ This repository contains a collection of data science projects and analyses that
    - [Link to Project](https://github.com/devynhughes/Devyn-Hughes-Portfolio/blob/a522f97b15ff267679e7cae5024b7e8be58724c4/Ham%20vs%20Spam.pdf)
 
 3. **US Municipal Census Data**
-   - Description: Pulling Census Data from the government website about different industries, this project attempts to create a model that can output the estimated revenue of a business depending on various socioeconomical variables.
+   - Description: Pulling Municipal Census Data from the government website about different industries, this project attempts to create a model that can output the estimated revenue of a business depending on various socioeconomical variables.
    - Tools Used: Python.
    - [Link to Project](https://github.com/devynhughes/Devyn-Hughes-Portfolio/tree/a522f97b15ff267679e7cae5024b7e8be58724c4/US%20Municipal%20Census%20Data%20Folder)
+   - *Project Demo*
+   - Watch the demo of this project below:
+
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=VLiRzTkDBJA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+4. **Creating a Model to Predict Swirling Data**
+   - Description: Through using code to generate random data sets that are set up in a form of a swirl, this projects tests various models to attempt to obtain a feasible accuracy.
+   - Tools Used: Python.
+   - [Link to Project](https://github.com/devynhughes/Devyn-Hughes-Portfolio/blob/4d46366b64db97705a6bd4026690f1c0fe417100/Creating%20a%20Model%20to%20Predict%20Swirling%20Data.ipynb)
+  
+   
