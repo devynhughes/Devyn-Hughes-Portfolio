@@ -8,7 +8,7 @@ This repository contains a collection of data science projects and analyses that
    - [Link to Project](https://github.com/devynhughes/Devyn-Hughes-Portfolio/blob/a522f97b15ff267679e7cae5024b7e8be58724c4/Defense%20Against%20Pandemics%20Using%20Covid.rmd)
 
 2. **Ham vs Spam**
-   - Description: Using Natural Language Processing, this project was done to decifer the differene between spam emails and ham emails for better business processes and safety.
+   - Description: Using Natural Language Processing, this project was done to decipher the difference between spam emails and ham emails for better business processes and safety.
    - Tools Used: Python.
    - [Link to Project](https://github.com/devynhughes/Devyn-Hughes-Portfolio/blob/a522f97b15ff267679e7cae5024b7e8be58724c4/Ham%20vs%20Spam.pdf)
 
