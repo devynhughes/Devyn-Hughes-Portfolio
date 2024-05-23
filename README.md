@@ -1,13 +1,6 @@
-# Data Science Portfolio'
+# Data Science Portfolio - Devyn Hughes
 
 This repository contains a collection of data science projects and analyses that showcase my skills and abilities in data analysis, machine learning, modeling, data visualization, etc.
-
-## Table of Contents
-- [Projects](#projects)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 1. **Defense Against Pandemics using COVID**
    - Description: Using various tools of machine learning with CO-VID19 data from each country across the world, the project aims to try and learn trends to predict mortality rate and incidence rate based on a multitude of variables.
