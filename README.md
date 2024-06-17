@@ -20,9 +20,5 @@ This repository contains a collection of data science projects and analyses that
    - Here is the Project Video below:
    - [![YouTube](http://i.ytimg.com/vi/VLiRzTkDBJA/hqdefault.jpg)](https://www.youtube.com/watch?v=VLiRzTkDBJA)
 
-4. **Creating a Model to Predict Swirling Data**
-   - Description: Through using code to generate random data sets that are set up in a form of a swirl, this projects tests various models to attempt to obtain a feasible accuracy.
-   - Tools Used: Python.
-   - [Link to Project](https://github.com/devynhughes/Devyn-Hughes-Portfolio/blob/4d46366b64db97705a6bd4026690f1c0fe417100/Creating%20a%20Model%20to%20Predict%20Swirling%20Data.ipynb)
-  
+
    
